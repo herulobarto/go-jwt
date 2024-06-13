@@ -6,6 +6,7 @@ import (
 
 	"github.com/gorilla/mux"
 	"github.com/herulobarto/go-jwt/configs"
+	"github.com/herulobarto/go-jwt/routes"
 )
 
 func main() {
@@ -14,6 +15,8 @@ func main() {
 	r := mux.NewRouter()
 	router := r.PathPrefix("/api").Subrouter()
 
-	log.Println("Server running at port 8080")
-	http.ListenAndServe(":8080", router)
+	routes.AuthRoutes(router)
+
+	log.Println("Server running at port 7070")
+	http.ListenAndServe(":7070", router)
 }
