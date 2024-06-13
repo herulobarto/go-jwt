@@ -16,6 +16,7 @@ func main() {
 	router := r.PathPrefix("/api").Subrouter()
 
 	routes.AuthRoutes(router)
+	routes.UserRoutes(router)
 
 	log.Println("Server running at port 7070")
 	http.ListenAndServe(":7070", router)

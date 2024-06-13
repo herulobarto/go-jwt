@@ -26,7 +26,7 @@ func CreateToken(user *models.User) (string, error) {
 		user.Email,
 
 		jwt.RegisteredClaims{
-			ExpiresAt: jwt.NewNumericDate(time.Now().Add(2 * time.Minute)),
+			ExpiresAt: jwt.NewNumericDate(time.Now().Add(5 * time.Minute)),
 			IssuedAt:  jwt.NewNumericDate(time.Now()),
 			NotBefore: jwt.NewNumericDate(time.Now()),
 		},
@@ -38,4 +38,22 @@ func CreateToken(user *models.User) (string, error) {
 
 	return ss, err
 
+}
+
+func ValidateToken(tokenString string) (any, error) {
+	token, err := jwt.ParseWithClaims(tokenString, &MyCustomClaims{}, func(token *jwt.Token) (interface{}, error) {
+		return mySigningKey, nil
+	})
+
+	if err != nil {
+		return nil, fmt.Errorf("Unauthorized")
+	}
+
+	claims, ok := token.Claims.(*MyCustomClaims)
+
+	if !ok || !token.Valid {
+		return nil, fmt.Errorf("Unauthorized")
+	}
+
+	return claims, nil
 }
